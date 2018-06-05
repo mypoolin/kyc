@@ -1,7 +1,7 @@
 This is the documentation for EKYC API. This is for all your KYC validation and authentication requirements. 
 We help you upload and validate the KYC documents for your customers, vendors, sellers, agents or anyone for that matter. 
 
-## Test API url: https://tempkyc.mypoolin.com/restful/document_verify
+## Test API url: https://testtempekyc.mypoolin.com/restful/document_verify
 
 ***
 
@@ -9,7 +9,7 @@ We help you upload and validate the KYC documents for your customers, vendors, s
 
 The variables below have to be passed using POST action to the url given above with the following field names.
 
-* merchant_name (your merchant username/key Example: test-name-p2m. You would have received this in your signup email with us under the subject line 'Welcome to WibmoPay!')
+
 * document_number (Document ID of the user in case of PAN/GST)
 * document_type (Document Type (options mentioned below))
 * document_file (Raw file) - optional
@@ -25,20 +25,22 @@ Currently Supported Document Type Values:
 3) AADHAAR
 
 Future Document Type Values that we will support: 
-4) COI (Certificate of Incorporation)
-5) LLP (Partnership LLP Agreement) 
-6) SOCIETY (Society Resolution Certificate) 
-7) TRUST (Trust Resolution Certificate) 
+* COI (Certificate of Incorporation)
+* LLP (Partnership LLP Agreement) 
+* SOCIETY (Society Resolution Certificate) 
+* TRUST (Trust Resolution Certificate) 
 
 
-A sample POST form would like this below - 
-<form action="https://tempkyc.mypoolin.com/restful/document_verify" method="POST">
-  	<input type="hidden" name="document_type" value="PAN">
-  	<input type="hidden" name="merchant_name" value="test-shobhit-kyc">
-  	<input type="hidden" name="document_number" value="12345ABCDE">
- </form>
+
+``` Sample Request -
+curl -iX POST https://testtempekyc.mypoolin.com/restful/document_verify -d "document_number=AUPPV6931E" -d "document_type=PAN" -H "apikey: API_KEY" 
+
 
 Status Code 
-1) Success 
-2) Fail
+1) 401: The API_KEY passed is not for the ekyc merchant or is not a valid key
+   Sample Response -
+  {"document_details":null,"is_document_valid":null,"message":"merchant_type is not kyc","status":"error","url":null}
 
+2) 200: Successful Processing of request.
+   Sample Response -
+   {"document_details":{"dob":"1992-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"message":"success","status":"ok"} ```
