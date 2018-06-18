@@ -12,6 +12,7 @@ The variables below have to be passed using POST action to the url given above w
 
 * document_number (Document ID of the user in case of PAN/GST)
 * document_type (Document Type (options mentioned below))
+* entity_name (Full name as present in this document of that person / organization) - optional
 * document_file (Raw file) - optional
 * document_json - optional
 
@@ -38,9 +39,21 @@ curl -iX POST https://testtempekyc.mypoolin.com/restful/document_verify -d "docu
 
 Status Code 
 1) 401: The API_KEY passed is not for the ekyc merchant or is not a valid key
+
    Sample Response -
   {"document_details":null,"is_document_valid":null,"message":"merchant_type is not kyc","status":"error","url":null}
 
-2) 200: Successful Processing of request.
+2) 200: Successful Processing of request and document is valid. 
+
    Sample Response -
-   {"document_details":{"dob":"1992-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"message":"success","status":"ok"} ```
+   {"document_details":{"dob":"1992-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"message":"success","status":"ok"}
+   
+   If it is also matching with the name (if provided) 
+   Sample Response -
+   {"document_details":{"dob":"1992-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"is_name_matching":true,"message":"success","status":"ok"}
+   
+   If it is not matching with the name (if provided) 
+   Sample Response -
+   {"document_details":{"dob":"1992-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"is_name_matching":false,"message":"success","status":"ok"}
+   
+   ```
