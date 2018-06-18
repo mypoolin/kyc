@@ -42,18 +42,23 @@ Status Code
 
    Sample Response -
   {"document_details":null,"is_document_valid":null,"message":"merchant_type is not kyc","status":"error","url":null}
+  
+2) 200: Successful Processing of request but document is invalid.   
+
+   Sample Response -
+   {"document_details":{"updated_date":null,"name":null,"pan":"AUEPV5921E","verified":false},"is_document_valid":false,"message":"error","status":"ok"}
 
 2) 200: Successful Processing of request and document is valid. 
 
    Sample Response -
-   {"document_details":{"dob":"1992-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"message":"success","status":"ok"}
+   {"document_details":{"updated_date":"2017-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"message":"success","status":"ok"}
    
    If it is also matching with the name (if provided) 
    Sample Response -
-   {"document_details":{"dob":"1992-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"is_name_matching":true,"message":"success","status":"ok"}
+   {"document_details":{"updated_date":"2017-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"is_name_matching":true,"message":"success","status":"ok"}
    
    If it is not matching with the name (if provided) 
    Sample Response -
-   {"document_details":{"dob":"1992-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"is_name_matching":false,"message":"success","status":"ok"}
+   {"document_details":{"updated_date":"2017-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"is_name_matching":false,"message":"success","status":"ok"}
    
    ```
