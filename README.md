@@ -48,7 +48,7 @@ Status Code
    Sample Response -
    {"document_details":{"updated_date":null,"name":null,"pan":"AUEPV5921E","verified":false},"is_document_valid":false,"message":"error","status":"ok"}
 
-2) 200: Successful Processing of request and document is valid. 
+3) 200: Successful Processing of request and document is valid. 
 
    Sample Response -
    {"document_details":{"updated_date":"2017-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"message":"success","status":"ok"}
