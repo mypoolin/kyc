@@ -1,7 +1,7 @@
 This is the documentation for EKYC API. This is for all your KYC validation and authentication requirements. 
 We help you upload and validate the KYC documents for your customers, vendors, sellers, agents or anyone for that matter. 
 
-## Test API url: https://testtempekyc.mypoolin.com/restful/document_verify
+## Test API url: https://testtempekyc.mypoolin.com/kyc_verification
 
 ***
 
@@ -9,21 +9,21 @@ We help you upload and validate the KYC documents for your customers, vendors, s
 
 The variables below have to be passed using POST action to the url given above with the following field names.
 
+* checksum (creation process is described below) 
+* merchant_name (your merchant username/key eg-test-name-ekyc)
+* merchant_txn_id (your transaction id eg - 12345ABCDE)
+* entity_name (Name of the user) 
+* doc_types (comma separated payment mode you want eg -gstin,individual_pan,company_pan) - optional
 
-* document_number (Document ID of the user in case of PAN/GST)
-* document_type (Document Type (options mentioned below))
-* entity_name (Full name as present in this document of that person / organization) - optional
-* document_file (Raw file) - optional
-* document_json - optional
 
 
 **Please note again that these parameters have to be sent in a POST request.**
 If you need to read more about POST requests, please refer to - https://www.w3schools.com/tags/ref_httpmethods.asp
 
 Currently Supported Document Type Values:
-1) GST
-2) PAN
-3) AADHAAR
+1) GST - gstin
+2) PAN - individual_pan
+3) PAN - company_pan
 
 Future Document Type Values that we will support: 
 * COI (Certificate of Incorporation)
@@ -32,33 +32,26 @@ Future Document Type Values that we will support:
 * TRUST (Trust Resolution Certificate) 
 
 
+## Checksum creation and usage
 
-``` Sample Request -
-curl -iX POST https://testtempekyc.mypoolin.com/restful/document_verify -d "document_number=AUPPV6931E" -d "document_type=PAN" -H "apikey: API_KEY" 
+Checksum is a field used to validate the parameters of the transaction.
+To create the checksum we will require the following fields:
 
+1. Merchant Transaction ID (merchant_txn_id)
+2. Documents to be validated (doc_types)
+3. Username (your merchant username)
+4. Secret/API Key (your merchant secret)
 
-Status Code 
-1) 401: The API_KEY passed is not for the ekyc merchant or is not a valid key
+We create a verifying string in the following manner:
 
-   Sample Response -
-  {"document_details":null,"is_document_valid":null,"message":"merchant_type is not kyc","status":"error","url":null}
-  
-2) 200: Successful Processing of request but document is invalid.   
+```
+merchant_txn_id|doc_types|username|secret
+```
 
-   Sample Response -
-   {"document_details":{"updated_date":null,"name":null,"pan":"AUEPV5921E","verified":false},"is_document_valid":false,"message":"error","status":"ok"}
+Here we are using | (pipe) as a separator. Now we will hash this verifying string with sha512 algorithm
+and pass it in the calls
 
-3) 200: Successful Processing of request and document is valid. 
+The status of document can be of the following types:
+1. VERIFIED
+2. INVALID
 
-   Sample Response -
-   {"document_details":{"updated_date":"2017-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"message":"success","status":"ok"}
-   
-   If it is also matching with the name (if provided) 
-   Sample Response -
-   {"document_details":{"updated_date":"2017-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"is_name_matching":true,"message":"success","status":"ok"}
-   
-   If it is not matching with the name (if provided) 
-   Sample Response -
-   {"document_details":{"updated_date":"2017-09-26","name":"Dummy Name","pan":"AUEPV5921E","verified":true},"is_document_valid":true,"is_name_matching":false,"message":"success","status":"ok"}
-   
-   ```
